@@ -1,7 +1,7 @@
 # Object Oriented Programming Game Project
 
-<h2 align="center">I CAN HAZ CHEEZBURGER?!??</h2>
-<p align="center"><img src="screenshot.png"></p>
+<h2 align="center"> I CAN HAZ CHEEZBURGER?!?? </h2>
+<p align="center">  <img src="screenshot.png"></p>
 
 ## Introduction
 This first project was designed as a way for you to practice and learn about Object Oriented Programming. A good bit of code has already been provided for you, and it makes for an almost-working game.
@@ -48,6 +48,7 @@ Here, we are going to rewrite the code of this function to actually check if the
 If at least one enemy overlaps the player, then your function should return `true`. Otherwise it should return `false.
 
 As a hint, note that the box of each enemy is defined by its `x` and `y` coordinates and the `ENEMY_WIDTH` and `ENEMY_HEIGHT` constants. There are similar variables for the player.
+
 
 ### 3. Let's do some refactoring!
 Look at the `Player` and `Enemy` classes and notice that their `render` methods are identical. This violates our sacred DRY principle. Let's fix it!

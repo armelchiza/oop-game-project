@@ -28,12 +28,18 @@ var images = {};
 });
 
 
+class Entity {
 
+    render(ctx) {
+        ctx.drawImage(this.sprite, this.x, this.y);
+    }
+}
 
 
 // This section is where you will be doing most of your coding
-class Enemy {
+class Enemy extends Entity {
     constructor(xPos) {
+        super();
         this.x = xPos;
         this.y = -ENEMY_HEIGHT;
         this.sprite = images['enemy.png'];
@@ -46,16 +52,16 @@ class Enemy {
         this.y = this.y + timeDiff * this.speed;
     }
 
-    render(ctx) {
-        ctx.drawImage(this.sprite, this.x, this.y);
-    }
+
 }
 
-class Player {
+class Player extends Entity {
     constructor() {
+        super();
         this.x = 2 * PLAYER_WIDTH;
         this.y = GAME_HEIGHT - PLAYER_HEIGHT - 10;
         this.sprite = images['player.png'];
+
     }
 
     // This method is called by the game engine when left/right arrows are pressed
@@ -68,9 +74,6 @@ class Player {
         }
     }
 
-    render(ctx) {
-        ctx.drawImage(this.sprite, this.x, this.y);
-    }
 }
 
 
@@ -116,15 +119,21 @@ class Engine {
         }
     }
 
+
     // This method finds a random spot where there is no enemy, and puts one in there
     addEnemy() {
-        var enemySpots = (GAME_WIDTH / ENEMY_WIDTH)+1;
+        var enemySpots = (GAME_WIDTH / ENEMY_WIDTH);
 
-        var enemySpot;
+        var enemySpot; //UNDEFINED
+
         // Keep looping until we find a free enemy spot at random
-        while (!enemySpot || this.enemies[enemySpot]) {
+        while (enemySpot === undefined || this.enemies[enemySpot]) {
             enemySpot = Math.floor(Math.random() * enemySpots);
         }
+
+        //1ST STEP
+        // enemySpot === undefined, this.enemies[enemySpot] === UNDEFINED
+        // enemySpot ===1
 
         this.enemies[enemySpot] = new Enemy(enemySpot * ENEMY_WIDTH);
     }
@@ -187,6 +196,8 @@ class Engine {
             this.ctx.font = 'bold 30px Impact';
             this.ctx.fillStyle = '#ffffff';
             this.ctx.fillText(this.score + ' GAME OVER', 5, 30);
+            this.ctx.fillText('START AGAIN?', 100, 200);
+            this.ctx.fillText('PRESS ENTER', 105, 280);
         }
         else {
             // If player is not dead, then draw the score
@@ -202,12 +213,24 @@ class Engine {
 
     isPlayerDead() {
         // TODO: fix this function!
-        return false;
+        // this.y = GAME_HEIGHT - PLAYER_HEIGHT - 10;
+        // this.x = 2 * PLAYER_WIDTH;
+        var dead = false;
+        // var heightLIM = GAME_HEIGHT - (PLAYER_HEIGHT/2) - 10 +(ENEMY_HEIGHT/2);
+
+        for(var i=0; i<5; i++){
+          if (this.enemies[i] != undefined) {
+            if (this.enemies[i].x == this.player.x && this.enemies[i].y >= GAME_HEIGHT - PLAYER_HEIGHT){
+              dead = true;
+            }
+          }
+        }
+        //var ENEMY_WIDTH = 75;
+        //var ENEMY_HEIGHT = 156;
+        //var MAX_ENEMIES = 3; // ENNEMIES !!!
+        return dead;
     }
 }
-
-
-
 
 
 // This section will start the game
