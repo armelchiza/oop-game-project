@@ -6,7 +6,7 @@ var GAME_HEIGHT = 500;
 
 var ENEMY_WIDTH = 75;
 var ENEMY_HEIGHT = 156;
-var MAX_ENEMIES = 3;
+var MAX_ENEMIES = 3; // ENNEMIES !!!
 
 var PLAYER_WIDTH = 75;
 var PLAYER_HEIGHT = 54;
