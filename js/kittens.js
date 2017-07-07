@@ -28,6 +28,24 @@ var images = {};
     images[imgName] = img;
 });
 
+// SOUNDS
+
+function sound(src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function(){
+        this.sound.play();
+    }
+    this.stop = function(){
+        this.sound.pause();
+    }
+}
+
+
 
 class Entity {
 
@@ -77,9 +95,7 @@ class Player extends Entity {
 class Bullet extends Entity {
     constructor(xPos) {
         super();
-        this.x = xPos;
-        this.y = ENEMY_HEIGHT;
-        this.sprite = images['kitten.png'];
+        this.sprite = images['player.png'];
         this.boom = false;
 
         // Each enemy should have a different speed
@@ -88,7 +104,7 @@ class Bullet extends Entity {
 
     shoot(playerPos){
       this.x = playerPos;
-      this.y = GAME_HEIGHT - (PLAYER_HEIGHT*3);
+      this.y = GAME_HEIGHT - (PLAYER_HEIGHT*2) ;
     }
 
     update(timeDiff) {
@@ -105,11 +121,13 @@ This section is a tiny game engine.
 This engine will use your Enemy and Player classes to create the behavior of the game.
 The engine will try to draw your game at 60 frames per second using the requestAnimationFrame function
 */
+
 class Engine {
     constructor(element) {
         // Setup the player
         this.player = new Player();
         this.bullet = new Bullet();
+        var mySound = new sound("music/shot.mp3");
         // Setup enemies, making sure there are always three
         this.setupEnemies();
 
@@ -178,23 +196,6 @@ class Engine {
         this.gameLoop();
     }
 
-    rrestart() {
-        this.score = 0;
-        this.lastFrame = Date.now();
-
-        // Listen for keyboard left/right and update the player
-        document.addEventListener('keydown', e => {
-            if (e.keyCode === LEFT_ARROW_CODE) {
-                this.player.move(MOVE_LEFT);
-            }
-            else if (e.keyCode === RIGHT_ARROW_CODE) {
-                this.player.move(MOVE_RIGHT);
-            }
-        });
-
-        this.gameLoop();
-    }
-
     /*
     This is the core of the game engine. The `gameLoop` function gets called ~60 times per second
     During each execution of the function, we will update the positions of all game entities
@@ -210,6 +211,7 @@ class Engine {
         // Check how long it's been since last frame
         var currentFrame = Date.now();
         var timeDiff = currentFrame - this.lastFrame;
+        //console.log(mySound);
 
         // Increase the score!
         this.score += timeDiff;
@@ -229,7 +231,7 @@ class Engine {
 
         this.killCat();
 
-
+        //
 
         // Check if any enemies should die
         this.enemies.forEach((enemy, enemyIdx) => {
@@ -283,10 +285,10 @@ class Engine {
         this.enemies[i].x == this.bullet.x &&
       this.enemies[i].y > (this.bullet.y - 100))
         { delete this.enemies[i];
-          var audio = document.getElementById("song");
-          audio.play();
+          console.log(this.mySound); // prints undefined
+          mySound.play(); // UncoughtRefError : MySound is not defined
+          // it doesn't work neither when I use this.mySound.play() ...
         }
-        //
       }
     }
 
@@ -313,6 +315,13 @@ class Engine {
         return dead;
     }
 }
+
+
+
+
+
+
+
 
 
 // This section will start the game
